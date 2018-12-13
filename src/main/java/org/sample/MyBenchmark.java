@@ -39,24 +39,28 @@ import java.util.concurrent.TimeUnit;
 
 @Fork(value = 2)
 @BenchmarkMode({Mode.Throughput, Mode.AverageTime})
-@Warmup(iterations = 5, time = 200,
+@Warmup(iterations = 5, time = 100,
         timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 5, time = 200,
+@Measurement(iterations = 5, time = 100,
         timeUnit = TimeUnit.MILLISECONDS)
 public class MyBenchmark {
 
     @Benchmark
     public double testMethod1(MyState state) {
-        return state.value * Math.pow(2, 25);
+        return state.value * Math.pow(2, state.power);
     }
 
     @Benchmark
     public double testMethod2(MyState state) {
-        return state.value << 25;
+        return state.value << state.power;
     }
 
     @State(Scope.Benchmark)
     public static class MyState {
+
+        @Param({"5", "25"})
+        int power;
+
         private int value;
 
         private int cursor;
@@ -65,8 +69,8 @@ public class MyBenchmark {
 
         @Setup(Level.Trial)
         public void beforeBenchmark() {
-            values = new ArrayList<>(1000000);
-            for (int i = 0; i < 1000000; i++) {
+            values = new ArrayList<>(100000);
+            for (int i = 0; i < 100000; i++) {
                 values.add(i);
             }
         }
