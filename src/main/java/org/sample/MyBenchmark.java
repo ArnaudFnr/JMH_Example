@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
         timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 5, time = 100,
         timeUnit = TimeUnit.MILLISECONDS)
+@Threads(2)
 public class MyBenchmark {
 
     @Benchmark
